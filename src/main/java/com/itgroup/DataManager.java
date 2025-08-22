@@ -41,6 +41,8 @@ public class DataManager {
             String mdate = bean.getMdate();
             String lang = bean.getLang();
 
+            String message = title + "\t" + artist + "\t" + composer + "\t" + lyrics + "\t" + entertainment + "\t" + mdate + "\t" + lang;
+
             // 한줄씩 출력할 거임 System.out.println("제목 : " + title);
         }
     }
