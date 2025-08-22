@@ -51,9 +51,11 @@ public class Main {
                     manager.randomMusic();
                     break;
                 case 9: // 북마크 리스트
-                    manager.bookMark();
+                    manager.musicBookmark();
                     break;
             }
+
+            System.out.println();
         }
 
     }
