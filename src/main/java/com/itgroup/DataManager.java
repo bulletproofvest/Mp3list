@@ -1,7 +1,10 @@
 package com.itgroup;
 
+import com.itgroup.bean.Mp3list;
 import com.itgroup.dao.Mp3listDao;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class DataManager {
@@ -27,6 +30,19 @@ public class DataManager {
     }
 
     public void selectAll() {
+        List<Mp3list> mp3lists = mdao.selectAll();
+
+        for(Mp3list bean:mp3lists){
+            String title = bean.getTitle();
+            String artist = bean.getArtist();
+            String composer = bean.getComposer();
+            String lyrics = bean.getLyrics();
+            String entertainment = bean.getEntertainment();
+            String mdate = bean.getMdate();
+            String lang = bean.getLang();
+
+            // 한줄씩 출력할 거임 System.out.println("제목 : " + title);
+        }
     }
 
     public void getSize() {
