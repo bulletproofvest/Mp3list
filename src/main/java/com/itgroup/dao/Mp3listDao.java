@@ -12,6 +12,8 @@ public class Mp3listDao extends SuperDao{
 
 
     public List<Mp3list> selectAll() {
+        List<Mp3list> mp3lists = null;
 
+        return mp3lists;
     }
 }
