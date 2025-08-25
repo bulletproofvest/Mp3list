@@ -1,7 +1,7 @@
 package com.itgroup.bean;
 
 public class Mp3list {
-    private String id;
+    private int no;      // UUID 형식으로 바꿔서 만들어보기
     private String title;
     private String artist;
     private String composer;
@@ -13,8 +13,8 @@ public class Mp3list {
     public Mp3list() {
     }
 
-    public Mp3list(String id, String title, String artist, String composer, String lyrics, String entertainment, String mdate, String lang) {
-        this.id = id;
+    public Mp3list(int no, String title, String artist, String composer, String lyrics, String entertainment, String mdate, String lang) {
+        this.no = no;
         this.title = title;
         this.artist = artist;
         this.composer = composer;
@@ -27,7 +27,7 @@ public class Mp3list {
     @Override
     public String toString() {
         return "Mp3list{" +
-                "id='" + id + '\'' +
+                "no='" + no + '\'' +
                 ", title='" + title + '\'' +
                 ", artist='" + artist + '\'' +
                 ", composer='" + composer + '\'' +
@@ -38,12 +38,12 @@ public class Mp3list {
                 '}';
     }
 
-    public String getId() {
-        return id;
+    public int getNo() {
+        return no;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setNo(int no) {
+        this.no = no;
     }
 
     public String getTitle() {
