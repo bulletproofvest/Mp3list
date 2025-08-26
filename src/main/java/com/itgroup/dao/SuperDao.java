@@ -1,8 +1,8 @@
 package com.itgroup.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SuperDao {
     public SuperDao() {}
@@ -22,4 +22,5 @@ public class SuperDao {
         }
         return conn;
     }
+
 }

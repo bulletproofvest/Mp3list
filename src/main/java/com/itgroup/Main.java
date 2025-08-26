@@ -21,7 +21,7 @@ public class Main {
 
             int num = sc.nextInt();
 
-            switch (num){
+            switch (num){ // 데이타 date
                 case 0: // 종료
                     System.out.println("종료합니다.");
                     System.exit(0);
