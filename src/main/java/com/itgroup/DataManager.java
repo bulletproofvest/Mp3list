@@ -73,7 +73,7 @@ public class DataManager {
         } else {}
     }
 
-    public void updataMusic() {
+    public void updateMusic() {
         int cnt = -1;
         Mp3list mp3list = null;
 
@@ -85,40 +85,54 @@ public class DataManager {
         if(mp3list != null){
 
             while (true){
-                System.out.println("1: 종료, 2: 아티스트, 3: 작곡가, 4: 작사가, 5: 소속사, 6: 곡 발매일, 7: 언어 코드");
+                System.out.println("0: 종료, 1: 곡명, 2: 아티스트, 3: 작곡가, 4: 작사가, 5: 소속사, 6: 곡 발매일, 7: 언어 코드");
                 System.out.print(mp3list.getTitle() + " 곡의 수정할 정보를 고르세요: ");
                 int num = sc.nextInt();
+                sc.nextLine();
 
                 switch (num){
+                    case 0:
+                        return;
                     case 1:
+                        System.out.print("곡명을 입력해주세요: ");
+                        mp3list.setTitle(sc.nextLine().trim());
                         break;
                     case 2:
-                        System.out.println("아티스트를 입력해주세요: ");
-                        mp3list.setArtist(sc.nextLine());
+                        System.out.print("아티스트를 입력해주세요: ");
+                        mp3list.setArtist(sc.nextLine().trim());
                         break;
                     case 3:
                         System.out.println("작곡가를 입력해주세요: ");
-                        mp3list.setComposer(sc.nextLine());
+                        mp3list.setComposer(sc.nextLine().trim());
                         break;
                     case 4:
                         System.out.println("작사가를 입력해주세요: ");
-                        mp3list.setLyrics(sc.nextLine());
+                        mp3list.setLyrics(sc.nextLine().trim());
                         break;
                     case 5:
                         System.out.println("소속사를 입력해주세요: ");
-                        mp3list.setEntertainment(sc.nextLine());
+                        mp3list.setEntertainment(sc.nextLine().trim());
                         break;
                     case 6:
                         System.out.println("곡 발매일을 입력해주세요: ");
-                        mp3list.setMdate(sc.nextLine());
+                        mp3list.setMdate(sc.nextLine().trim());
                         break;
                     case 7:
                         System.out.println("언어 코드를 입력해주세요(KR, EN, JP): ");
-                        mp3list.setLang(sc.nextLine());
+                        mp3list.setLang(sc.nextLine().trim());
                         break;
                 }
 
-                cnt = mdao.updataMusic(mp3list);
+                cnt = mdao.updateMusic(mp3list);
+                System.out.println();
+
+                if(cnt == -1) {
+                    System.out.println("업데이트 실패");
+                } else if (cnt == 1) {
+                    System.out.println("업데이트 성공");
+                } else {}
+
+                return;
 
             }
 
@@ -126,12 +140,6 @@ public class DataManager {
             System.out.println("곡을 찾을 수 없습니다.");
         }
 
-
-        if(cnt == -1) {
-            System.out.println("업데이트 실패");
-        } else if (cnt == 1) {
-            System.out.println("업데이트 성공");
-        } else {}
     }
 
     public void deleteMusic() {

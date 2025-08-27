@@ -264,7 +264,6 @@ public class Mp3listDao extends SuperDao{
                 java.sql.Date mdate = rs.getDate("mdate");
                 song.setMdate(mdate == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(mdate));
                 song.setLang(rs.getString("lang"));
-
             }
         } catch (Exception e){
             e.printStackTrace();
@@ -281,25 +280,26 @@ public class Mp3listDao extends SuperDao{
 
     }
 
-    public int updataMusic(Mp3list findsong) {
+    public int updateMusic(Mp3list findsong) {
         int cnt = -1;
 
         Connection conn = null;
         PreparedStatement pstmt = null;
 
-        String sql = "update mp3list set artist = ?, composer = ?, lyrics = ?, entertainment = ?, mdate = ?, lang = ? ";
-        sql += "where title = ? ";
+        String sql = "update mp3list set title = ?, artist = ?, composer = ?, lyrics = ?, entertainment = ?, mdate = ?, lang = ? ";
+        sql += "where no = ? ";
 
         try{
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(7, findsong.getTitle());
-            pstmt.setString(1, findsong.getArtist());
-            pstmt.setString(2, findsong.getComposer());
-            pstmt.setString(3, findsong.getLyrics());
-            pstmt.setString(4, findsong.getEntertainment());
-            pstmt.setString(5, findsong.getMdate());
-            pstmt.setString(6, findsong.getLang());
+            pstmt.setString(1, findsong.getTitle());
+            pstmt.setString(2, findsong.getArtist());
+            pstmt.setString(3, findsong.getComposer());
+            pstmt.setString(4, findsong.getLyrics());
+            pstmt.setString(5, findsong.getEntertainment());
+            pstmt.setString(6, findsong.getMdate());
+            pstmt.setString(7, findsong.getLang());
+            pstmt.setInt(8, findsong.getNo());
 
             cnt = pstmt.executeUpdate();
             conn.commit();

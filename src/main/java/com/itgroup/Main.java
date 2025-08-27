@@ -33,7 +33,7 @@ public class Main {
                     manager.insertMusic();
                     break;
                 case 3: // 수정
-                    manager.updataMusic();
+                    manager.updateMusic();
                     break;
                 case 4: // 삭제
                     manager.deleteMusic();
