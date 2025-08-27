@@ -102,23 +102,23 @@ public class DataManager {
                         mp3list.setArtist(sc.nextLine().trim());
                         break;
                     case 3:
-                        System.out.println("작곡가를 입력해주세요: ");
+                        System.out.print("작곡가를 입력해주세요: ");
                         mp3list.setComposer(sc.nextLine().trim());
                         break;
                     case 4:
-                        System.out.println("작사가를 입력해주세요: ");
+                        System.out.print("작사가를 입력해주세요: ");
                         mp3list.setLyrics(sc.nextLine().trim());
                         break;
                     case 5:
-                        System.out.println("소속사를 입력해주세요: ");
+                        System.out.print("소속사를 입력해주세요: ");
                         mp3list.setEntertainment(sc.nextLine().trim());
                         break;
                     case 6:
-                        System.out.println("곡 발매일을 입력해주세요: ");
+                        System.out.print("곡 발매일을 입력해주세요: ");
                         mp3list.setMdate(sc.nextLine().trim());
                         break;
                     case 7:
-                        System.out.println("언어 코드를 입력해주세요(KR, EN, JP): ");
+                        System.out.print("언어 코드를 입력해주세요(KR, EN, JP): ");
                         mp3list.setLang(sc.nextLine().trim());
                         break;
                 }
@@ -126,19 +126,18 @@ public class DataManager {
                 cnt = mdao.updateMusic(mp3list);
                 System.out.println();
 
-                if(cnt == -1) {
-                    System.out.println("업데이트 실패");
-                } else if (cnt == 1) {
-                    System.out.println("업데이트 성공");
-                } else {}
-
-                return;
 
             }
 
         } else  {
             System.out.println("곡을 찾을 수 없습니다.");
         }
+
+        if(cnt == -1) {
+            System.out.println("업데이트 실패");
+        } else if (cnt == 1) {
+            System.out.println("업데이트 성공");
+        } else {}
 
     }
 
@@ -148,7 +147,14 @@ public class DataManager {
         System.out.print("삭제하고자 하는 곡명을 입력하세요: ");
         String musicName = sc.nextLine().trim();
 
-        cnt = mdao.deleteMusic(musicName);
+        Mp3list mp3list = mdao.searchMusic(musicName);
+
+        if(mp3list != null){
+            cnt = mdao.deleteMusic(mp3list.getNo());
+        } else {
+            System.out.println("해당곡을 찾지 못했습니다.");
+        }
+
 
         if(cnt == -1){
             System.out.println("삭제 실패");
@@ -190,12 +196,13 @@ public class DataManager {
 
     public void selectCountry() {
         System.out.print("목록을 확인할 음악 코드를 입력하세요(KR,EN,JP): ");
-        String cord = sc.next();
+        String cord = sc.nextLine().trim();
 
         List<Mp3list> mp3lists = mdao.selectCountry(cord);
 
         if(mp3lists.size() == 0){
             System.out.println("저장된 곡이 없습니다.");
+            return;
         }
 
         for(Mp3list bean:mp3lists){
@@ -215,7 +222,7 @@ public class DataManager {
     public void randomMusic() {
 
         System.out.print("추천받고자 하는 음악 코드를 입력하세요(KR,EN,JP): ");
-        String cord = sc.next();
+        String cord = sc.nextLine().trim();
 
         List<Mp3list> mp3lists = mdao.randomMusic(cord);
 
@@ -228,7 +235,7 @@ public class DataManager {
             int num = random.nextInt(siz);
             Mp3list bean = mp3lists.get(num);
 
-            System.out.println(num);
+            System.out.println();
 
             System.out.println("<" + bean.getTitle() + ">");
             System.out.println("아티스트/작곡가/작사가: " + bean.getArtist() + "/" + bean.getComposer() + "/" + bean.getLyrics());
@@ -239,7 +246,4 @@ public class DataManager {
         System.out.println();
     }
 
-    public void musicBookmark() {
-
-    }
 }

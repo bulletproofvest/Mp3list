@@ -16,10 +16,11 @@ public class Main {
         DataManager manager = new DataManager();
 
         while(true){
-            System.out.println("0: 종료, 1: 곡 검색, 2: 곡 추가, 3: 곡 수정, 4: 곡 삭제, 5: 곡 리스트, 6: 저장된 곡 수, 7: 나라별 곡 리스트, 8: 나라별 랜덤 추천곡 9: 북마크 리스트 ");
+            System.out.println("0: 종료, 1: 곡 검색, 2: 곡 추가, 3: 곡 수정, 4: 곡 삭제, 5: 곡 리스트, 6: 저장된 곡 수, 7: 나라별 곡 리스트, 8: 나라별 랜덤 추천곡 ");
             System.out.print("번호 입력: ");
 
             int num = sc.nextInt();
+            sc.nextLine();
 
             switch (num){ // 데이타 date
                 case 0: // 종료
@@ -49,9 +50,6 @@ public class Main {
                     break;
                 case 8: // 나라별 랜덤 추천곡
                     manager.randomMusic();
-                    break;
-                case 9: // 북마크 리스트
-                    manager.musicBookmark();
                     break;
             }
 

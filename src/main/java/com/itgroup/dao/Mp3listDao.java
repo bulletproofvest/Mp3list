@@ -135,27 +135,18 @@ public class Mp3listDao extends SuperDao{
         return cnt;
     }
 
-    public int deleteMusic(String musicName) {
+    public int deleteMusic(int musicNo) {
         int cnt = -1;
-        int num;
-        Mp3list findMusic = searchMusic(musicName);
 
         String sql = "Delete from mp3list where no = ? ";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
 
-        if(findMusic != null){
-            num = searchMusic(musicName).getNo();
-        } else{
-            System.out.println("해당 곡을 찾지 못했습니다.");
-            return cnt;
-        }
-
         try{
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, num);
+            pstmt.setInt(1, musicNo);
             cnt = pstmt.executeUpdate();        // executeUpdate() : 실행 후 영향 받은 행의 수(int)를 반환 / 삭제되면 1, 삭제된 게 없으면 0
 
             conn.commit();
@@ -244,7 +235,7 @@ public class Mp3listDao extends SuperDao{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String sql = "select * from mp3list where Lower(title) = Lower(?) ";
+        String sql = "select * from mp3list where title = ? ";
 
         try{
             conn = getConnection();
@@ -329,7 +320,7 @@ public class Mp3listDao extends SuperDao{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String sql = "select * from Mp3list where lang = ? ";
+        String sql = "select * from mp3list where lower(lang) = lower(?) ";
 
         try{
             conn = getConnection();
@@ -374,7 +365,7 @@ public class Mp3listDao extends SuperDao{
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String sql = "select * from Mp3list where lang = ? ";
+        String sql = "select * from Mp3list where lower(lang) = lower(?) ";
 
         try {
             conn = getConnection();
@@ -382,7 +373,7 @@ public class Mp3listDao extends SuperDao{
             pstmt.setString(1, cord);
             rs = pstmt.executeQuery();
 
-            if(rs.next()){
+            while(rs.next()){
                 Mp3list bean = new Mp3list();
 
                 bean.setNo(rs.getInt("NO"));
