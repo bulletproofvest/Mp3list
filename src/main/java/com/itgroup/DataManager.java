@@ -224,7 +224,7 @@ public class DataManager {
         System.out.print("추천받고자 하는 음악 코드를 입력하세요(KR,EN,JP): ");
         String cord = sc.nextLine().trim();
 
-        List<Mp3list> mp3lists = mdao.randomMusic(cord);
+        List<Mp3list> mp3lists = mdao.selectCountry(cord);
 
         int siz = mp3lists.size();
 
