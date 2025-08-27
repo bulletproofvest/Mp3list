@@ -6,8 +6,7 @@ import com.itgroup.dao.Mp3listDao;
 
 import java.lang.reflect.Method;
 import java.util.*;
-
-
+import java.util.Random;
 
 public class DataManager {
     private Mp3listDao mdao = null;
@@ -56,35 +55,13 @@ public class DataManager {
                     String colName = "set" + col.substring(0,1) + col.substring(1).toLowerCase();
                     Method method;
 
-                    if(col.equals("NO")){
-                        int no = Integer.parseInt(memo);
-                        method = Mp3list.class.getMethod(colName, int.class);
-                        try{
-                            method.invoke(bean, no);
-                        } catch (NumberFormatException e){
-                            System.out.println("숫자로 입력해주세요.");
-                            continue;
-                        }
-                    } else{
-                        method = Mp3list.class.getMethod(colName, String.class);
-                        method.invoke(bean, memo);
-                    }
+                    method = Mp3list.class.getMethod(colName, String.class);
+                    method.invoke(bean, memo);
+
                     break;
                 } catch (Exception e){
                     e.printStackTrace();
                 }
-                /*
-                if(col.equals("No")){
-                    try{
-                        int no = Integer.parseInt(memo);
-                        bean.setNo(no);
-                        break;
-                    } catch (NumberFormatException e){
-                        System.out.println("숫자 형식으로 입력해주세요.");
-                        continue;
-                    }
-                }
-                */
             }
         }
         cnt = mdao.insertData(bean);
@@ -95,46 +72,6 @@ public class DataManager {
             System.out.println(bean.getTitle()+" 추가 성공");
         } else {}
     }
-
-        /*
-        Mp3list bean = new Mp3list();
-        int cnt = -1;
-
-        System.out.print("곡 번호 입력: ");
-        bean.setNo(sc.nextInt());
-        sc.nextLine();
-
-        System.out.print("곡명 입력: ");
-        bean.setTitle(sc.nextLine());
-
-        System.out.print("아티스트 입력: ");
-        bean.setArtist(sc.nextLine());
-
-        System.out.print("작곡가 입력: ");
-        bean.setComposer(sc.nextLine());
-
-        System.out.print("작사가 입력: ");
-        bean.setLyrics(sc.nextLine());
-
-        System.out.print("소속사 입력: ");
-        bean.setEntertainment(sc.nextLine());
-
-        System.out.print("음원 발매일 입력: ");
-        bean.setMdate(sc.nextLine());
-
-        System.out.print("언어 코드 입력(KR, EN, JP): ");
-        bean.setLang(sc.nextLine());
-
-        cnt = mdao.insertData(bean);
-
-        if(cnt == -1){
-            System.out.println("음악 추가 실패");
-        } else if (cnt == 1){
-            System.out.println(bean.getTitle()+" 추가 성공");
-        } else {}
-
-        */
-
 
     public void updataMusic() {
         int cnt = -1;
@@ -200,10 +137,10 @@ public class DataManager {
     public void deleteMusic() {
         int cnt = -1;
 
-        System.out.print("삭제하고자 하는 곡 번호를 입력하세요: ");
-        int num = sc.nextInt();
+        System.out.print("삭제하고자 하는 곡명을 입력하세요: ");
+        String musicName = sc.nextLine().trim();
 
-        cnt = mdao.deleteMusic(num);
+        cnt = mdao.deleteMusic(musicName);
 
         if(cnt == -1){
             System.out.println("삭제 실패");
@@ -268,24 +205,30 @@ public class DataManager {
     }
 
     public void randomMusic() {
+
         System.out.print("추천받고자 하는 음악 코드를 입력하세요(KR,EN,JP): ");
         String cord = sc.next();
 
-        int siz = mdao.selectCountry(cord).size();
-        int random = new Random().nextInt(siz);
+        List<Mp3list> mp3lists = mdao.randomMusic(cord);
 
-        Mp3list mp3list = mdao.randomMusic(random);
+        int siz = mp3lists.size();
+
+        if(siz == 0){
+            System.out.println("추천할 곡이 없습니다. 리스트 목록 갯수: 0 ");
+        }else {
+            Random random = new Random();
+            int num = random.nextInt(siz);
+            Mp3list bean = mp3lists.get(num);
+
+            System.out.println(num);
+
+            System.out.println("<" + bean.getTitle() + ">");
+            System.out.println("아티스트/작곡가/작사가: " + bean.getArtist() + "/" + bean.getComposer() + "/" + bean.getLyrics());
+            System.out.println("소속사: " + bean.getEntertainment());
+            System.out.println("음원 발매일: " + bean.getMdate());
+        }
 
         System.out.println();
-
-        if(mp3list == null){
-            System.out.println("추천할 곡이 없습니다.");
-        }else {
-            System.out.println("<" + mp3list.getTitle() + ">");
-            System.out.println("아티스트/작곡가/작사가: " + mp3list.getArtist() + "/" + mp3list.getComposer() + "/" + mp3list.getLyrics());
-            System.out.println("소속사: " + mp3list.getEntertainment());
-            System.out.println("음원 발매일: " + mp3list.getMdate());
-        }
     }
 
     public void musicBookmark() {

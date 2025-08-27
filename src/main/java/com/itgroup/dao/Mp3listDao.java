@@ -70,6 +70,10 @@ public class Mp3listDao extends SuperDao{
 
             while (rs.next()){
                 String columnName = rs.getString("COLUMN_NAME"); // 현재 행에서 칼럼 이름을 가져옴
+
+                if("NO".equalsIgnoreCase(columnName)){
+                    continue;
+                }
                 int nullable = rs.getInt("NULLABLE"); // 현재 칼럼이 null 을 허용하는지 여부
                 boolean isRequired = (nullable == DatabaseMetaData.columnNoNulls);
                 column.put(columnName, isRequired);
@@ -91,8 +95,8 @@ public class Mp3listDao extends SuperDao{
     public int insertData(Mp3list bean) {
         int cnt = -1;
 
-        String sql = "INSERT INTO MP3LIST ";
-        sql += "VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO MP3LIST (no, title, artist, composer, lyrics, entertainment, mdate, lang) ";
+        sql += "VALUES(Mp3list_seq.NEXTVAL, ?, ?, ?, ?, ?, ?, ?)";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -101,14 +105,13 @@ public class Mp3listDao extends SuperDao{
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
 
-            pstmt.setInt(1, bean.getNo());
-            pstmt.setString(2, bean.getTitle());
-            pstmt.setString(3, bean.getArtist());
-            pstmt.setString(4, bean.getComposer());
-            pstmt.setString(5, bean.getLyrics());
-            pstmt.setString(6, bean.getEntertainment());
-            pstmt.setString(7, bean.getMdate());
-            pstmt.setString(8, bean.getLang());
+            pstmt.setString(1, bean.getTitle());
+            pstmt.setString(2, bean.getArtist());
+            pstmt.setString(3, bean.getComposer());
+            pstmt.setString(4, bean.getLyrics());
+            pstmt.setString(5, bean.getEntertainment());
+            pstmt.setString(6, bean.getMdate());
+            pstmt.setString(7, bean.getLang());
 
             cnt = pstmt.executeUpdate();
             conn.commit();
@@ -132,7 +135,46 @@ public class Mp3listDao extends SuperDao{
         return cnt;
     }
 
-    public int deleteMusic(int num) {
+    public int deleteMusic(String musicName) {
+        int cnt = -1;
+        int num;
+        Mp3list findMusic = searchMusic(musicName);
+
+        String sql = "Delete from mp3list where no = ? ";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        if(findMusic != null){
+            num = searchMusic(musicName).getNo();
+        } else{
+            System.out.println("해당 곡을 찾지 못했습니다.");
+            return cnt;
+        }
+
+        try{
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, num);
+            cnt = pstmt.executeUpdate();        // executeUpdate() : 실행 후 영향 받은 행의 수(int)를 반환 / 삭제되면 1, 삭제된 게 없으면 0
+
+            conn.commit();
+        } catch (Exception e){
+            try{
+                conn.rollback();
+            }catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        } finally {
+            try{
+                if(pstmt != null){pstmt.close();}
+                if(conn != null){conn.close();}
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return cnt;
+        /*
         int cnt = -1;
         String sql = "Delete from mp3list where no = ? ";
 
@@ -161,6 +203,7 @@ public class Mp3listDao extends SuperDao{
             }
         }
         return cnt;
+        */
     }
 
     public int getSize() {
@@ -324,29 +367,35 @@ public class Mp3listDao extends SuperDao{
         return mp3lists;
     }
 
-    public Mp3list randomMusic(int random) {
-        Mp3list mp3list = new Mp3list();
+    public List<Mp3list> randomMusic(String cord) {
+        List<Mp3list> mp3lists = new ArrayList<>();
 
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String sql = "select * from Mp3list where no = ? ";
+        String sql = "select * from Mp3list where lang = ? ";
 
         try {
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, random);
+            pstmt.setString(1, cord);
             rs = pstmt.executeQuery();
 
             if(rs.next()){
-                mp3list.setTitle(rs.getString("title"));
-                mp3list.setArtist(rs.getString("artist"));
-                mp3list.setComposer(rs.getString("composer"));
-                mp3list.setLyrics(rs.getString("lyrics"));
-                mp3list.setEntertainment(rs.getString("entertainment"));
-                java.sql.Date mdate = rs.getDate("mdate");
-                mp3list.setMdate(mdate == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(mdate));
+                Mp3list bean = new Mp3list();
+
+                bean.setNo(rs.getInt("NO"));
+                bean.setTitle(rs.getString("TITLE"));
+                bean.setArtist(rs.getString("ARTIST"));
+                bean.setComposer(rs.getString("COMPOSER"));
+                bean.setLyrics(rs.getString("LYRICS"));
+                bean.setEntertainment(rs.getString("ENTERTAINMENT"));
+                java.sql.Date mdate = rs.getDate("MDATE");
+                bean.setMdate(mdate == null ? null : new SimpleDateFormat("yyyy-MM-dd").format(mdate));
+                bean.setLang(rs.getString("LANG"));
+
+                mp3lists.add(bean);
             }
 
         } catch (Exception e){
@@ -361,6 +410,6 @@ public class Mp3listDao extends SuperDao{
             }
         }
 
-        return mp3list;
+        return mp3lists;
     }
 }
