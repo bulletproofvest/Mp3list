@@ -1,14 +1,7 @@
 package com.itgroup;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Scanner;
 
-// CREATE USER sundori IDENTIFIED BY hello1234 DEFAULT TABLESPACE users TEMPORARY TABLESPACE temp;
-//GRANT connect, resource TO sundori;
-//ALTER USER sundori ACCOUNT UNLOCK;
 
 public class Main {
     public static void main(String[] args) {
@@ -22,33 +15,33 @@ public class Main {
             int num = sc.nextInt();
             sc.nextLine();
 
-            switch (num){ // 데이타 date
-                case 0: // 종료
+            switch (num){
+                case 0:
                     System.out.println("종료합니다.");
                     System.exit(0);
                     break;
-                case 1: // 검색
+                case 1:
                     manager.searchMusic();
                     break;
-                case 2: // 추가
+                case 2:
                     manager.insertMusic();
                     break;
-                case 3: // 수정
+                case 3:
                     manager.updateMusic();
                     break;
-                case 4: // 삭제
+                case 4:
                     manager.deleteMusic();
                     break;
-                case 5: // 리스트
+                case 5:
                     manager.selectAll();
                     break;
-                case 6: // 곡 수 체크
+                case 6:
                     manager.getSize();
                     break;
-                case 7: // 나라별 리스트
+                case 7:
                     manager.selectCountry();
                     break;
-                case 8: // 나라별 랜덤 추천곡
+                case 8:
                     manager.randomMusic();
                     break;
             }

@@ -69,12 +69,12 @@ public class Mp3listDao extends SuperDao{
             rs = dbmd.getColumns(null, null, "MP3LIST", null);
 
             while (rs.next()){
-                String columnName = rs.getString("COLUMN_NAME"); // 현재 행에서 칼럼 이름을 가져옴
+                String columnName = rs.getString("COLUMN_NAME");
 
                 if("NO".equalsIgnoreCase(columnName)){
                     continue;
                 }
-                int nullable = rs.getInt("NULLABLE"); // 현재 칼럼이 null 을 허용하는지 여부
+                int nullable = rs.getInt("NULLABLE");
                 boolean isRequired = (nullable == DatabaseMetaData.columnNoNulls);
                 column.put(columnName, isRequired);
             }
@@ -131,7 +131,6 @@ public class Mp3listDao extends SuperDao{
                 e.printStackTrace();
             }
         }
-
         return cnt;
     }
 
@@ -147,7 +146,7 @@ public class Mp3listDao extends SuperDao{
             conn = getConnection();
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, musicNo);
-            cnt = pstmt.executeUpdate();        // executeUpdate() : 실행 후 영향 받은 행의 수(int)를 반환 / 삭제되면 1, 삭제된 게 없으면 0
+            cnt = pstmt.executeUpdate();
 
             conn.commit();
         } catch (Exception e){
@@ -165,36 +164,6 @@ public class Mp3listDao extends SuperDao{
             }
         }
         return cnt;
-        /*
-        int cnt = -1;
-        String sql = "Delete from mp3list where no = ? ";
-
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-
-        try{
-            conn = getConnection();
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, num);
-            cnt = pstmt.executeUpdate();        // executeUpdate() : 실행 후 영향 받은 행의 수(int)를 반환 / 삭제되면 1, 삭제된 게 없으면 0
-
-            conn.commit();
-        } catch (Exception e){
-            try{
-                conn.rollback();
-            }catch (Exception e2) {
-                e2.printStackTrace();
-            }
-        } finally {
-            try{
-                if(pstmt != null){pstmt.close();}
-                if(conn != null){conn.close();}
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return cnt;
-        */
     }
 
     public int getSize() {
