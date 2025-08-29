@@ -1,8 +1,6 @@
 package com.itgroup.dao;
 
 import java.sql.*;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SuperDao {
     public SuperDao() {}
